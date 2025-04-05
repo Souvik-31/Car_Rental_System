@@ -33,20 +33,26 @@ DELIMITER ;
 
 -- Stored Procedure: Calculate total earnings
 DELIMITER $$
+
 CREATE PROCEDURE TotalEarnings()
 BEGIN
-    SELECT SUM(DATEDIFF(ReturnDate, RentalDate) * 50) AS TotalEarnings FROM Rentals WHERE ReturnDate IS NOT NULL;
+    SELECT SUM(DATEDIFF(r.ReturnDate, r.RentalDate) * c.DailyRent) AS TotalEarnings
+    FROM Rentals r
+    JOIN Cars c ON r.CarID = c.CarID
+    WHERE r.ReturnDate IS NOT NULL;
 END $$
+
 DELIMITER ;
+
 
 -- Stored Procedure: Retrieve customers who rented more than 3 times
 DELIMITER $$
 CREATE PROCEDURE FrequentCustomers()
 BEGIN
-    SELECT Customers.Name, COUNT(Rentals.RentalID) AS RentalCount
+    SELECT Customers.CustomerID,Customers.Name, COUNT(Rentals.RentalID) AS RentalCount
     FROM Rentals
     JOIN Customers ON Rentals.CustomerID = Customers.CustomerID
-    GROUP BY Customers.Name
+    GROUP BY Customers.CustomerID,Customers.Name
     HAVING RentalCount > 3;
 END $$
 DELIMITER ;
@@ -78,20 +84,19 @@ DELIMITER ;
 
 -- Stored Procedure: Generate a report on rentals by month
 DELIMITER $$
-DELIMITER $$
 CREATE PROCEDURE RentalsByMonth()
 BEGIN
-    SELECT DATE_FORMAT(RentalDate, '%Y-%m') AS RentalMonth, 
-           COUNT(*) AS RentalCount, 
-           SUM(DATEDIFF(ReturnDate, RentalDate) * 50) AS TotalEarnings
-    FROM Rentals
-    WHERE ReturnDate IS NOT NULL
+    SELECT 
+        DATE_FORMAT(r.RentalDate, '%Y-%m') AS RentalMonth, 
+        COUNT(*) AS RentalCount, 
+        SUM(DATEDIFF(r.ReturnDate, r.RentalDate) * c.DailyRent) AS TotalEarnings
+    FROM Rentals r
+    JOIN Cars c ON r.CarID = c.CarID
+    WHERE r.ReturnDate IS NOT NULL
     GROUP BY RentalMonth
     ORDER BY RentalMonth;
 END $$
 DELIMITER ;
-
-DROP PROCEDURE IF EXISTS RentalsByMonth;
 
 
 -- Stored Procedure: Retrieve customers with overdue rentals

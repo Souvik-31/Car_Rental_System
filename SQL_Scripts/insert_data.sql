@@ -24,7 +24,6 @@ INSERT INTO Cars (Model, Brand, AvailabilityStatus, DailyRent) VALUES
 
 select * from cars;
 
-
 INSERT INTO Customers (Name, LicenseNumber, Contact) VALUES
 ('Bittyam Paul', 'A9876543', '9876543210'),
 ('Sai Sriram', 'B1234567', '9887654321'),

@@ -17,7 +17,10 @@ ORDER BY RentalCount DESC
 LIMIT 1;
 
 -- Calculate total earnings from car rentals
-SELECT SUM(DATEDIFF(ReturnDate, RentalDate) * 50) AS TotalEarnings FROM Rentals WHERE ReturnDate IS NOT NULL;
+SELECT SUM(DATEDIFF(r.ReturnDate, r.RentalDate) * c.DailyRent) AS TotalEarnings
+    FROM Rentals r
+    JOIN Cars c ON r.CarID = c.CarID
+    WHERE r.ReturnDate IS NOT NULL;
 
 -- Retrieve customers who rented more than 3 times
 SELECT Customers.Name, COUNT(Rentals.RentalID) AS RentalCount
@@ -42,8 +45,12 @@ ORDER BY RentalCount DESC
 LIMIT 1;
 
 -- Generate a report on rentals by month
-SELECT DATE_FORMAT(RentalDate, '%Y-%m') AS RentalMonth, COUNT(*) AS RentalCount
-FROM Rentals
+SELECT DATE_FORMAT(r.RentalDate, '%Y-%m') AS RentalMonth, 
+	   COUNT(*) AS RentalCount, 
+	   SUM(DATEDIFF(r.ReturnDate, r.RentalDate) * c.DailyRent) AS TotalEarnings
+FROM Rentals r
+JOIN Cars c ON r.CarID = c.CarID
+WHERE r.ReturnDate IS NOT NULL
 GROUP BY RentalMonth
 ORDER BY RentalMonth;
 

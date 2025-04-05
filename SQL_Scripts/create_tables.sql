@@ -5,7 +5,8 @@ CREATE TABLE Cars (
     CarID INT AUTO_INCREMENT PRIMARY KEY,
     Model VARCHAR(50),
     Brand VARCHAR(50),
-    AvailabilityStatus ENUM('Available', 'Rented') DEFAULT 'Available'
+    AvailabilityStatus ENUM('Available', 'Rented') DEFAULT 'Available',
+    DailyRent INT
 );
 
 CREATE TABLE Customers (
