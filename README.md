@@ -1,3 +1,3 @@
-# Car_Rental_System
+# Car Rental System
 
 The Car Rental Management System is a database-driven solution designed to streamline the operations of a car rental business. Built using MySQL, the system manages essential data including cars, customers, and rental transactions. It supports real-time tracking of vehicle availability, customer rental history, overdue returns, and earnings analytics. The system uses stored procedures, triggers, and SQL queries to automate key functionalities such as preventing double bookings, updating car statuses, and generating business insights. This project aims to demonstrate efficient data handling and automation in a practical rental service environment.
